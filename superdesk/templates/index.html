@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% load superdesk_tags %}
+
+{% block content %}
+<section>
+    <h2>Packages</h2>
+    {% items type="package" length=8 %}
+    <article class="package">
+        {% package_items class="icls:picture" group="main" length=1 %}
+        <figure class="fig package-fig">
+            {% remote_content "rend:viewImage" as remote %}
+            <a href="{% url item item_id=package.id %}"><img src="{{ remote.href|media_url }}" width="{{ remote.width }}" height="{{ remote.height }}" alt="" title="{{ item.description }}" /></a>
+            <figcaption class="fig-copy">&copy; {{ item.creditline }}</figcaption>
+        </figure>
+        {% /package_items %}
+
+        <p>{{ item.slugline }}<br />{{ item.versionCreated }}</p>
+        <h1><a href="{% url item item_id=item.id %}">{{ item.headline }}</a></h1>
+
+        <footer>&copy; {{ item.creditline }}</footer>
+    </article>
+    {% /items %}
+</section>
+
+<section class="ticker">
+    <h2>Ticker</h2>
+    {% items type="news" length=89 %}
+    <article class="news">
+        <header>
+            <p>{{ item.slugline }}</p>
+            <h4><a href="{% url item item_id=item.id %}">{{ item.headline }}</a></h4>
+            <address>{% if item.byline %}by {{ item.byline }} {% endif %} on {{ item.versionCreated }}</address>
+        </header>
+
+        {% if item.contentSet.inlineContent %}
+        <pre>{{ item.description }}</pre>
+        <footer>&copy; {{ item.creditline }}</footer>
+
+        {% else %}
+            {% remote_content "rend:viewImage" as remote %}
+            <figure class="fig">
+                <img src="{{ remote.href|media_url }}" width="{{ remote.width }}" height="{{ remote.height }}" alt="" title="{{ item.description }}" />
+                <figcaption class="fig-copy">&copy; {{ item.creditline }}</figcaption>
+            </figure>
+        {% endif %}
+    </article>
+    {% /items %}
+</section>
+{% endblock %}
