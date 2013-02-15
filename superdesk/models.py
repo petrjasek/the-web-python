@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from mongoengine import *
 from collections import deque
 
@@ -71,7 +72,7 @@ class Ref(EmbeddedDocument):
 class Group(EmbeddedDocument):
     """Group
     """
-    id = StringField(db_field="_id")
+    id = StringField(db_field='_id')
     role = StringField()
     mode = StringField()
     refs = ListField(EmbeddedDocumentField(Ref))
@@ -147,4 +148,8 @@ class Item(Document):
     @property
     def versionCreated(self):
         return self.itemMeta.versionCreated
+
+    @property
+    def urgency(self):
+        return self.contentMeta.urgency
 

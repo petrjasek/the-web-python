@@ -1,7 +1,9 @@
+from __future__ import unicode_literals
 from hashlib import sha1
 from bs4 import BeautifulSoup
 from django import template
 from django.template.base import NodeList, token_kwargs
+from django.utils import six
 from ..models import Item
 
 register = template.Library()
@@ -33,7 +35,7 @@ def inline_content(context, **kwargs):
     except KeyError:
         item = context['item']
     soup = BeautifulSoup(item.contentSet.inlineContent.content)
-    return "\n".join([str(p) for p in soup.body.find_all('p')])
+    return "\n".join([unicode(p) for p in soup.body.find_all('p')])
 
 def get_kwargs(parser, token):
     """helper for parsing token kwargs"""
@@ -67,7 +69,7 @@ class ItemsNode(template.Node):
         self.kwargs = kwargs
 
     def resolve_kwargs(self, context):
-        return dict([(key, val.resolve(context)) for key, val in self.kwargs.iteritems()])
+        return dict([(key, val.resolve(context)) for key, val in six.iteritems(self.kwargs)])
 
     def render(self, context):
         context.push();

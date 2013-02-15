@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 
+{% load url from future %}
 {% load superdesk_tags %}
 
 {% block content %}
@@ -10,26 +11,27 @@
         {% package_items class="icls:picture" group="main" length=1 %}
         <figure class="fig package-fig">
             {% remote_content "rend:viewImage" as remote %}
-            <a href="{% url item item_id=package.id %}"><img src="{{ remote.href|media_url }}" width="{{ remote.width }}" height="{{ remote.height }}" alt="" title="{{ item.description }}" /></a>
+            <a href="{% url 'item' item_id=package.id %}"><img src="{{ remote.href|media_url }}" width="{{ remote.width }}" height="{{ remote.height }}" alt="" title="{{ item.description }}" /></a>
             <figcaption class="fig-copy">&copy; {{ item.creditline }}</figcaption>
         </figure>
         {% /package_items %}
 
         <p>{{ item.slugline }}<br />{{ item.versionCreated }}</p>
-        <h1><a href="{% url item item_id=item.id %}">{{ item.headline }}</a></h1>
+        <h1><a href="{% url 'item' item_id=item.id %}">{{ item.headline }}</a></h1>
 
         <footer>&copy; {{ item.creditline }}</footer>
+        <span class="urgency u-{{ item.urgency }}">{{ item.urgency }}</span>
     </article>
     {% /items %}
 </section>
 
 <section class="ticker">
     <h2>Ticker</h2>
-    {% items type="news" length=89 %}
+    {% items type="news" length=34 %}
     <article class="news">
         <header>
             <p>{{ item.slugline }}</p>
-            <h4><a href="{% url item item_id=item.id %}">{{ item.headline }}</a></h4>
+            <h4><a href="{% url 'item' item_id=item.id %}">{{ item.headline }}</a></h4>
             <address>{% if item.byline %}by {{ item.byline }} {% endif %} on {{ item.versionCreated }}</address>
         </header>
 
@@ -44,6 +46,7 @@
                 <figcaption class="fig-copy">&copy; {{ item.creditline }}</figcaption>
             </figure>
         {% endif %}
+        <span class="urgency u-{{ item.urgency }}">{{ item.urgency }}</span>
     </article>
     {% /items %}
 </section>

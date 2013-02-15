@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 
+{% load url from future %}
 {% load superdesk_tags %}
 
 {% block title %}{{ item.headline }}{% endblock %}
@@ -9,20 +10,6 @@
     <p>{{ item.slugline }}</p>
     <h1>{{ item.headline }}</h2>
     <address>{% if item.byline %}by {{ item.byline }} {% endif %} on {{ item.versionCreated }}</address>
-
-    {% if item.contentSet.inlineContent %}
-        {% inline_content as content %}
-        {{ content|safe }}
-        <footer>&copy; {{ item.creditline }}</footer>
-
-    {% elif item.contentSet.remoteContent %}
-        {% remote_content "rend:viewImage" as remote %}
-        <figure class="fig">
-            <img src="{{ remote.href|media_url }}" width="{{ remote.width }}" height="{{ remote.height }}" alt="" title="{{ item.description }}" />
-            <figcaption class="fig-copy">&copy; {{ item.creditline }}</figcaption>
-        </figure>
-
-    {% else %}
     <div class="row">
         <div class="span8">
             {% package_items group="main" class="icls:text" %}
@@ -44,10 +31,9 @@
 
             {% package_items group="sidebars" %}
             {% if first %}<h3>Related</h3>{% endif %}
-            <h4><a href="{% url item item_id=item.id %}">{{ item.headline }}</a></h4>
+            <h4><a href="{% url 'item' item_id=item.id %}">{{ item.headline }}</a></h4>
             {% /package_items %}
         </div>
     </div>
-    {% endif %}
 </article>
 {% endblock %}
